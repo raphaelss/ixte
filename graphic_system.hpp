@@ -43,8 +43,7 @@ public:
 	void rmpoint(std::string label, std::vector<double> points);
 	
 	void save();
-	void save(std::string path);
-	void save(std::string path, std::vector<std::string> lines);
+	void bind(std::string path);
 	
 	double time_length();
 	
@@ -57,6 +56,8 @@ private:
 	void draw_points(sf::RenderTarget &target, line::const_iterator begin,
 	    line::const_iterator end, double y);
 
+	void modified();
+
 	std::mutex _lock;
 	system _system;
 	const ruler &_ruler;
@@ -65,6 +66,7 @@ private:
 	sf::CircleShape _point_circle;
 	bool _modified, _modified_noticed, _exit;
 	error_msgr &_error_msgr;
+	std::string _current_file;
 };
 
 }

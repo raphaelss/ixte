@@ -38,9 +38,10 @@ public:
 	void execute(std::string str);
 	
 private:
-	bool dispatch(std::string &str);
+	void dispatch(std::string &str);
 	void exit_cmd(std::string &args);
-	void dump_cmd(std::string &args);
+	void save_cmd(std::string &args);
+	void bind_cmd(std::string &args);
 	void mkline_cmd(std::string &args);
 	void rmline_cmd(std::string &args);
 	void mkpoint_cmd(std::string &args);

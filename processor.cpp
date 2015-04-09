@@ -75,12 +75,14 @@ void processor::execute(std::string str) {
 	_io_serv.dispatch(boost::bind(&processor::dispatch,  this, str));
 }
 
-bool processor::dispatch(std::string &str) {
+void processor::dispatch(std::string &str) {
 	std::string cmd = split_first_token(str);
 	if (cmd == "exit") {
 		exit_cmd(str);
 	} else if (cmd == "save") {
-		dump_cmd(str);
+		save_cmd(str);
+	} else if (cmd == "bind") {
+		bind_cmd(str);
 	} else if (cmd == "mkline") {
 		mkline_cmd(str);
 	} else if (cmd == "rmline") {
@@ -91,9 +93,7 @@ bool processor::dispatch(std::string &str) {
 		rmpoint_cmd(str);
 	} else {
 		external_cmd(cmd, str);
-		return false;
 	}
-	return true;
 }
 
 void processor::exit_cmd(std::string &args) {
@@ -106,14 +106,24 @@ void processor::exit_cmd(std::string &args) {
 	_system.exit();
 }
 
-void processor::dump_cmd(std::string &args) {
+void processor::save_cmd(std::string &args) {
 	std::stringstream ss(args);
 	std::string tmp;
 	if (ss >> tmp) {
-		_system.save(std::move(tmp));
+		_error_msgr("save error: too many parameters (expected 0).");
 		return;
 	}
-	_error_msgr("dump error: missing file path.");
+	_system.save();
+}
+
+void processor::bind_cmd(std::string &args) {
+	std::stringstream ss(args);
+	std::string tmp;
+	if (ss >> tmp) {
+		_system.bind(std::move(tmp));
+		return;
+	}
+	_error_msgr("bind error: missing file path argument.");
 }
 
 void processor::mkline_cmd(std::string &args) {

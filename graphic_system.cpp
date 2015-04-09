@@ -34,7 +34,7 @@ void dump_line(std::ofstream &fout, const std::string &label, const line &line) 
 	if (it == end) {
 		return;
 	}
-	fout << label;
+	fout << "mkpoint " << label;
 	for (auto it = line.cbegin(), end = line.cend(); it != end; ++it) {
 		fout << ' '<< *it;
 	}
@@ -43,7 +43,7 @@ void dump_line(std::ofstream &fout, const std::string &label, const line &line) 
 
 graphic_system::graphic_system(const ruler &ruler_arg, sf::Font &font, error_msgr &msgr)
     : _lock(), _system(), _ruler(ruler_arg), _point_circle(point_circle_radius), _modified(false),
-    _modified_noticed(false), _exit(false), _error_msgr(msgr) {
+    _modified_noticed(false), _exit(false), _error_msgr(msgr), _current_file() {
 	_label_text.setFont(font);
 	_label_text.setColor(quasi_black);
 	_label_text.setCharacterSize(13);
@@ -71,11 +71,17 @@ void graphic_system::redo() {
 void graphic_system::mkline(std::vector<std::string> labels) {
 	std::lock_guard<std::mutex> guard(_lock);
 	labels.erase(_system.batch_add_mod(labels.begin(), labels.end()), labels.end());
+	if (!labels.empty()) {
+		modified();
+	}
 }
 
 void graphic_system::rmline(std::vector <std::string> labels) {
 	std::lock_guard<std::mutex> guard(_lock);
 	labels.erase(_system.batch_remove_mod(labels.begin(), labels.end()), labels.end());
+	if (!labels.empty()) {
+		modified();
+	}
 }
 
 void graphic_system::mkpoint(std::string label, std::vector<double> points) {
@@ -83,6 +89,9 @@ void graphic_system::mkpoint(std::string label, std::vector<double> points) {
 	try {
 		line &line = _system.get_line(label);
 		points.erase(line.batch_add_mod(points.begin(), points.end()), points.end());
+		if (!points.empty()) {
+			modified();
+		}
 	} catch (std::out_of_range &e) {
 		_error_msgr("mkpoint error: line " + label + " does not exist");
 	}
@@ -93,6 +102,9 @@ void graphic_system::rmpoint(std::string label, std::vector<double> points) {
 	try {
 		line &line = _system.get_line(label);
 		points.erase(line.batch_remove_mod(points.begin(), points.end()), points.end());
+		if(!points.empty()) {
+			modified();
+		}
 	} catch (std::out_of_range &e) {
 		_error_msgr("mkpoint error: line " + label + " does not exist");
 	}
@@ -100,16 +112,15 @@ void graphic_system::rmpoint(std::string label, std::vector<double> points) {
 
 void graphic_system::save() {
 	std::lock_guard<std::mutex> guard(_lock);
-
-}
-
-void graphic_system::save(std::string path) {
-	std::lock_guard<std::mutex> guard(_lock);
+	if (_current_file.empty()) {
+		_error_msgr("save error: no currently associated file.");
+		return;
+	}
 	auto it = _system.cbegin(), end = _system.cend();
 	if (it == end) {
 		return;
 	}
-	std::ofstream fout(path);
+	std::ofstream fout(_current_file);
 	fout << "mkline";
 	for (; it != end; ++it) {
 		fout << ' ' << it->first;
@@ -118,10 +129,12 @@ void graphic_system::save(std::string path) {
 	for (it = _system.cbegin(); it != end; ++it) {
 		dump_line(fout, it->first, it->second);
 	}
+	_modified = _modified_noticed = false;
 }
 
-void graphic_system::save(std::string path, std::vector<std::string> lines) {
+void graphic_system::bind(std::string path) {
 	std::lock_guard<std::mutex> guard(_lock);
+	_current_file = std::move(path);
 }
 
 double graphic_system::time_length() {
@@ -177,6 +190,11 @@ void graphic_system::draw(sf::RenderTarget &target) {
 		draw_points(target, pair.first, pair.second, y);
 		y += inter_line_padding;
 	}
+}
+
+void graphic_system::modified() {
+	_modified = true;
+	_modified_noticed = false;
 }
 
 }
