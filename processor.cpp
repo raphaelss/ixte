@@ -75,7 +75,7 @@ void processor::execute(std::string str) {
 	_io_serv.dispatch(boost::bind(&processor::dispatch,  this, str));
 }
 
-void processor::dispatch(std::string &str) {
+bool processor::dispatch(std::string str) {
 	std::string cmd = split_first_token(str);
 	if (cmd == "exit") {
 		exit_cmd(str);
@@ -92,8 +92,9 @@ void processor::dispatch(std::string &str) {
 	} else if (cmd == "rmpoint") {
 		rmpoint_cmd(str);
 	} else {
-		external_cmd(cmd, str);
+		return external_cmd(cmd, str);
 	}
+	return false;
 }
 
 void processor::exit_cmd(std::string &args) {
@@ -164,6 +165,10 @@ void processor::mkpoint_cmd(std::string &args) {
 	std::vector<double> arg_vector;
 	double tmp;
 	while (ss >> tmp) {
+		if (tmp < 0) {
+			_error_msgr("mkpoint error: negative number.");
+			return;
+		}
 		arg_vector.push_back(tmp);
 	}
 	_system.mkpoint(label, std::move(arg_vector));
@@ -179,19 +184,23 @@ void processor::rmpoint_cmd(std::string &args) {
 	std::vector<double> arg_vector;
 	double tmp;
 	while (ss >> tmp) {
+		if (tmp < 0) {
+			_error_msgr("rmpoint error: negative number.");
+			return;
+		}
 		arg_vector.push_back(tmp);
 	}
 	_system.rmpoint(label, std::move(arg_vector));
 }
 
-void processor::external_cmd(std::string &cmd, std::string &args) {
+bool processor::external_cmd(std::string &cmd, std::string &args) {
 	external ext(_error_msgr, _io_serv);
 	int test_pipe[2];
 	pipe(test_pipe);
 	pid_t procid = fork();
 	if (procid < 0) {
 		_error_msgr("external command error: failed to fork.");
-		return;
+		return false;
 	}
 	if (!procid) {
 		ext.child_redirect_stdstreams();
@@ -213,10 +222,13 @@ void processor::external_cmd(std::string &cmd, std::string &args) {
 		close(test_pipe[1]);
 		char ch;
 		int n = read(test_pipe[0], &ch, 1);
+		close(test_pipe[0]);
 		if (!n) {
 			push_external(std::move(ext));
+			return true;
 		} else {
-			_error_msgr("exec failed.");
+			_error_msgr("exec failed: " + cmd + " " + args + ".");
+			return false;
 		}
 	}
 }
@@ -249,10 +261,11 @@ void processor::async_external_read() {
 				std::istream s(&b);
 				std::string line;
 				std::getline(s, line);
-				this->dispatch(line);
+				if (this->dispatch(line)) {
+					return;
+				}
 		    	}
-		    	if (!e) {
-			} else if (e || !n) {
+		    	if (e || !n) {
 				this->pop_external();
 			}
 			std::lock_guard<std::mutex> guard(_externals_lock);

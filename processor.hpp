@@ -38,7 +38,7 @@ public:
 	void execute(std::string str);
 	
 private:
-	void dispatch(std::string &str);
+	bool dispatch(std::string str);
 	void exit_cmd(std::string &args);
 	void save_cmd(std::string &args);
 	void bind_cmd(std::string &args);
@@ -46,7 +46,7 @@ private:
 	void rmline_cmd(std::string &args);
 	void mkpoint_cmd(std::string &args);
 	void rmpoint_cmd(std::string &args);
-	void external_cmd(std::string &cmd, std::string &args);
+	bool external_cmd(std::string &cmd, std::string &args);
 	
 	bool has_running_external();
 	void write_to_external(const std::string &str);

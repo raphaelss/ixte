@@ -17,3 +17,7 @@ target_link_libraries(xts ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
     sfml-graphics sfml-window sfml-system)
     
 file(COPY assets DESTINATION .)
+
+file(GLOB scripts scripts/*)
+
+file(COPY ${scripts} DESTINATION .)

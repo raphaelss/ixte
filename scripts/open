@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+echo "./load $1"
+echo "bind $1"

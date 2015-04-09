@@ -147,7 +147,7 @@ void graphic_system::exit() {
 	if (_modified_noticed) {
 		_exit = true;
 	} else if (_modified) {
-		_error_msgr("Modifications were not dumped to file.");
+		_error_msgr("Modifications were not saved.");
 		_modified_noticed = true;
 	} else {
 		_exit = true;
