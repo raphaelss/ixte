@@ -10,6 +10,19 @@ const double inter_line_padding = 60;
 const double label_line_padding = 20;
 const double point_circle_radius = 3;
 
+//helper
+void dump_line(std::ofstream &fout, const std::string &label, const line &line) {
+	auto it = line.cbegin(), end = line.cend();
+	if (it == end) {
+		return;
+	}
+	fout << label;
+	for (auto it = line.cbegin(), end = line.cend(); it != end; ++it) {
+		fout << ' '<< *it;
+	}
+	fout << std::endl;
+}
+
 graphic_system::graphic_system(const ruler &ruler_arg, sf::Font &font, error_msgr &msgr)
     : _system(), _ruler(ruler_arg), _point_circle(point_circle_radius), _modified(false),
     _modified_noticed(false), _exit(false), _error_msgr(msgr) {
@@ -23,30 +36,37 @@ graphic_system::graphic_system(const ruler &ruler_arg, sf::Font &font, error_msg
 }
 
 void graphic_system::resized() {
+	std::lock_guard<std::mutex> guard(_lock);
 	_line_rect.setSize(_ruler.line_size());
 }
 
 void graphic_system::snapshot() {
+	std::lock_guard<std::mutex> guard(_lock);
 	//TODO
 }
 
 void graphic_system::undo() {
+	std::lock_guard<std::mutex> guard(_lock);
 	//TODO
 }
 
 void graphic_system::redo() {
+	std::lock_guard<std::mutex> guard(_lock);
 	//TODO
 }
 
 void graphic_system::mkline(std::vector<std::string> labels) {
+	std::lock_guard<std::mutex> guard(_lock);
 	labels.erase(_system.batch_add_mod(labels.begin(), labels.end()), labels.end());
 }
 
 void graphic_system::rmline(std::vector <std::string> labels) {
+	std::lock_guard<std::mutex> guard(_lock);
 	labels.erase(_system.batch_remove_mod(labels.begin(), labels.end()), labels.end());
 }
 
 void graphic_system::mkpoint(std::string label, std::vector<double> points) {
+	std::lock_guard<std::mutex> guard(_lock);
 	try {
 		line &line = _system.get_line(label);
 		points.erase(line.batch_add_mod(points.begin(), points.end()), points.end());
@@ -56,6 +76,7 @@ void graphic_system::mkpoint(std::string label, std::vector<double> points) {
 }
 
 void graphic_system::rmpoint(std::string label, std::vector<double> points) {
+	std::lock_guard<std::mutex> guard(_lock);
 	try {
 		line &line = _system.get_line(label);
 		points.erase(line.batch_remove_mod(points.begin(), points.end()), points.end());
@@ -64,22 +85,13 @@ void graphic_system::rmpoint(std::string label, std::vector<double> points) {
 	}
 }
 
-void graphic_system::dump() const {
+void graphic_system::dump() {
+	std::lock_guard<std::mutex> guard(_lock);
+
 }
 
-void dump_line(std::ofstream &fout, const std::string &label, const line &line) {
-	auto it = line.cbegin(), end = line.cend();
-	if (it == end) {
-		return;
-	}
-	fout << label;
-	for (auto it = line.cbegin(), end = line.cend(); it != end; ++it) {
-		fout << ' '<< *it;
-	}
-	fout << std::endl;
-}
-
-void graphic_system::dump(std::string path) const {
+void graphic_system::dump(std::string path) {
+	std::lock_guard<std::mutex> guard(_lock);
 	auto it = _system.cbegin(), end = _system.cend();
 	if (it == end) {
 		return;
@@ -95,14 +107,17 @@ void graphic_system::dump(std::string path) const {
 	}
 }
 
-void graphic_system::dump(std::string path, std::vector<std::string> lines) const {
+void graphic_system::dump(std::string path, std::vector<std::string> lines) {
+	std::lock_guard<std::mutex> guard(_lock);
 }
 
-double graphic_system::time_length() const {
+double graphic_system::time_length() {
+	std::lock_guard<std::mutex> guard(_lock);
 	return _system.time_length();
 }
 
 void graphic_system::exit() {
+	std::lock_guard<std::mutex> guard(_lock);
 	if (_modified_noticed) {
 		_exit = true;
 	} else if (_modified) {
@@ -113,7 +128,8 @@ void graphic_system::exit() {
 	}
 }
 
-bool graphic_system::should_exit() const {
+bool graphic_system::should_exit() {
+	std::lock_guard<std::mutex> guard(_lock);
 	return _exit;
 }
 
@@ -139,6 +155,7 @@ void graphic_system::draw_points(sf::RenderTarget &target, line::const_iterator 
 }
 
 void graphic_system::draw(sf::RenderTarget &target) {
+	std::lock_guard<std::mutex> guard(_lock);
 	double y = _ruler.line_first_y();
 	for (auto i = _system.cbegin(), end = _system.cend(); i != end; ++i) {
 		draw_label(target, i->first, y);

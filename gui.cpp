@@ -24,7 +24,7 @@ void gui::run() {
 		while (_window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
-				_system.exit();
+				_proc.request_exit();
 				break;
 			case sf::Event::Resized:
 				resized(event.size.width, event.size.height);
@@ -52,12 +52,11 @@ void gui::run() {
 				break;
 			}
 		}
-		_proc.do_work();
 		if (_system.should_exit()) {
 			_window.close();
 			continue;
 		}
-		_window.clear(sf::Color(250, 250, 255));
+		_window.clear(background);
 		draw();
 		_window.display();
 	}

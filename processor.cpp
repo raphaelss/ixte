@@ -1,12 +1,15 @@
 #include "processor.hpp"
 #include <sstream>
 #include <fstream>
-#include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 namespace xts {
 
-namespace fs = boost::filesystem;
+namespace asio = boost::asio;
 
 // helper
 static std::string split_first_token(std::string &str) {
@@ -22,23 +25,43 @@ static std::string split_first_token(std::string &str) {
 	return token;
 }
 
+void thread_fun(asio::io_service &io_serv) {
+	asio::io_service::work work(io_serv);
+	io_serv.run();
+}
+
 processor::processor(graphic_system &sys, error_msgr &msgr)
-    : _system(sys), _error_msgr(msgr) {}
-
-
-void processor::do_work() {
-	
+    : _system(sys), _error_msgr(msgr), _io_serv(),
+    _worker_thread(thread_fun, std::ref(_io_serv)),
+    _running_externals(), _externals_lock() {}
+    
+processor::~processor() {
+	_io_serv.stop();
+	if (_worker_thread.joinable()) {
+		_worker_thread.join();
+	}
+}
+    
+void processor::request_exit() {
+	_system.exit();
 }
 
 void processor::execute(std::string str) {
-	dispatch(str);
+	{
+		std::lock_guard<std::mutex> guard(_externals_lock);
+		if (has_running_external()) {
+			write_to_external(str);
+			return;
+		} 
+	}
+	_io_serv.dispatch(boost::bind(&processor::dispatch,  this, str));
 }
 
-void processor::dispatch(std::string &str) {
+bool processor::dispatch(std::string &str) {
 	std::string cmd = split_first_token(str);
 	if (cmd == "exit") {
 		exit_cmd(str);
-	} else if (cmd == "dump") {
+	} else if (cmd == "save") {
 		dump_cmd(str);
 	} else if (cmd == "mkline") {
 		mkline_cmd(str);
@@ -50,7 +73,9 @@ void processor::dispatch(std::string &str) {
 		rmpoint_cmd(str);
 	} else {
 		external_cmd(cmd, str);
+		return false;
 	}
+	return true;
 }
 
 void processor::exit_cmd(std::string &args) {
@@ -132,57 +157,80 @@ void processor::rmpoint_cmd(std::string &args) {
 }
 
 void processor::external_cmd(std::string &cmd, std::string &args) {
-	if (fs::exists(cmd)) {
-		fs::path p(cmd);
-		while (fs::is_symlink(p)) {
-			p = fs::read_symlink(p);
-		}
-		if (fs::is_directory(p)) {
-			_error_msgr("external command error: " + cmd + "is a directory");
-			return;
-		}
-		if (fs::is_regular_file(p)) {
-			fs::file_status status = fs::status(p);
-			if (!(status.permissions() & (fs::others_exe | fs::owner_exe | fs::group_exe))) {
-				group_cmd(p.native(), args);
-				return;
-			}
-		}
-	}
-	executable_cmd(cmd, args);
-
-}
-
-void processor::group_cmd(std::string path, std::string &args) {
-	std::ifstream fin(path);
-	std::string line;
-	while (std::getline(fin, line)) {
-		dispatch(line);
-	}
-}
-
-void processor::executable_cmd(std::string &cmd, std::string &args) {
-/*
-	pid_t procid = vfork();
+	external ext(_error_msgr, _io_serv);
+	int test_pipe[2];
+	pipe(test_pipe);
+	pid_t procid = fork();
 	if (procid < 0) {
-		_error_msgr("external command error: " + cmd + " - failed to fork");
+		_error_msgr("external command error: failed to fork.");
 		return;
 	}
-	else if (!procid) {
-		std::vector<std::string> tmp_vec;
-		boost::split(tmp_vec, args, boost::is_space, boost::token_compress_on);
-		std::vector<const char*> ptr_vec;
-		std::transform(tmp_vec.begin(), tmp_vec.end(), std::back_inserter(ptr_vec), [](std::string &str) {
-			str.c_str();
-		});
-		ptr_vec.insert(ptr_vec.begin(), cmd.c_str());
-		ptr_vec.push_back(nullptr);
-		execvp(cmd.c_str(), ptr_vec.data());
-		
+	if (!procid) {
+		ext.child_redirect_stdstreams();
+		close(test_pipe[0]);
+		fcntl(test_pipe[1], F_SETFD, FD_CLOEXEC);
+		std::vector<std::string> split_args;
+		boost::split(split_args, args, boost::algorithm::is_any_of(" \t"), boost::token_compress_on);
+		char **argv= new char * [split_args.size() + 2];
+		argv[0] = const_cast<char*>(cmd.c_str());
+		for(unsigned i = 1; i < split_args.size() + 1; ++i) {
+			argv[i] = const_cast<char*>(split_args[i-1].c_str());
+		}
+		argv[split_args.size() + 1] = nullptr;
+		execvp(argv[0], argv);
+		write(test_pipe[1], "", 1);
+		_exit(1);
 	} else {
-		std::cout << "Parent process" << std::endl;
+		ext.parent_close_unused();
+		close(test_pipe[1]);
+		char ch;
+		int n = read(test_pipe[0], &ch, 1);
+		if (!n) {
+			push_external(std::move(ext));
+		} else {
+			_error_msgr("exec failed.");
+		}
 	}
-*/
+}
+
+bool processor::has_running_external() {
+	return !_running_externals.empty();
+}
+
+void processor::write_to_external(const std::string &str) {
+	_running_externals.back().write(str);
+}
+
+void processor::push_external(external &&ext) {
+	std::lock_guard<std::mutex> guard(_externals_lock);
+	_running_externals.emplace_back(std::move(ext));
+	async_external_read();
+}
+
+void processor::pop_external() {
+	std::lock_guard<std::mutex> guard(_externals_lock);
+	_running_externals.pop_back();
+}
+
+void processor::async_external_read() {
+	static asio::streambuf b;
+	if (has_running_external()) {
+		asio::async_read_until(_running_externals.back()._out, b, '\n',
+		    [this](const boost::system::error_code &e, std::size_t n) {
+		    	if (n > 0) {
+				std::istream s(&b);
+				std::string line;
+				std::getline(s, line);
+				this->dispatch(line);
+		    	}
+		    	if (!e) {
+			} else if (e || !n) {
+				this->pop_external();
+			}
+			std::lock_guard<std::mutex> guard(_externals_lock);
+			this->async_external_read();
+		});
+	}
 }
 
 }

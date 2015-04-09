@@ -1,6 +1,7 @@
 #ifndef GRAPHIC_SYSTEM_HPP_XTS_INCLUDED
 #define GRAPHIC_SYSTEM_HPP_XTS_INCLUDED
 #include <string>
+#include <mutex>
 #include <SFML/Graphics.hpp>
 #include "system.hpp"
 #include "ruler.hpp"
@@ -24,14 +25,14 @@ public:
 	void mkpoint(std::string label, std::vector<double> points);
 	void rmpoint(std::string label, std::vector<double> points);
 	
-	void dump() const;
-	void dump(std::string path) const;
-	void dump(std::string path, std::vector<std::string> lines) const;
+	void dump();
+	void dump(std::string path);
+	void dump(std::string path, std::vector<std::string> lines);
 	
-	double time_length() const;
+	double time_length();
 	
 	void exit();
-	bool should_exit() const;
+	bool should_exit();
 	
 private:
 	void draw_label(sf::RenderTarget &target, const std::string &str, double y);
@@ -39,6 +40,7 @@ private:
 	void draw_points(sf::RenderTarget &target, line::const_iterator begin,
 	    line::const_iterator end, double y);
 
+	std::mutex _lock;
 	system _system;
 	const ruler &_ruler;
 	sf::Text _label_text;
