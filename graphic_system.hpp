@@ -1,3 +1,21 @@
+/**
+* Xts - a musical temporal structure editor for musical composition and analysis
+* Copyright (C) 2015  Raphael Santos, http://www.raphaelss.com
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
 #ifndef GRAPHIC_SYSTEM_HPP_XTS_INCLUDED
 #define GRAPHIC_SYSTEM_HPP_XTS_INCLUDED
 #include <string>
@@ -16,7 +34,6 @@ public:
 	void resized();
 	void draw(sf::RenderTarget &target);
 
-	void snapshot();
 	void undo();
 	void redo();
 	
@@ -25,9 +42,9 @@ public:
 	void mkpoint(std::string label, std::vector<double> points);
 	void rmpoint(std::string label, std::vector<double> points);
 	
-	void dump();
-	void dump(std::string path);
-	void dump(std::string path, std::vector<std::string> lines);
+	void save();
+	void save(std::string path);
+	void save(std::string path, std::vector<std::string> lines);
 	
 	double time_length();
 	

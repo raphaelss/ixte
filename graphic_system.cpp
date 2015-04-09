@@ -1,3 +1,21 @@
+/**
+* Xts - a musical temporal structure editor for musical composition and analysis
+* Copyright (C) 2015  Raphael Santos, http://www.raphaelss.com
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
 #include "graphic_system.hpp"
 #include "config.hpp"
 #include <algorithm>
@@ -24,7 +42,7 @@ void dump_line(std::ofstream &fout, const std::string &label, const line &line) 
 }
 
 graphic_system::graphic_system(const ruler &ruler_arg, sf::Font &font, error_msgr &msgr)
-    : _system(), _ruler(ruler_arg), _point_circle(point_circle_radius), _modified(false),
+    : _lock(), _system(), _ruler(ruler_arg), _point_circle(point_circle_radius), _modified(false),
     _modified_noticed(false), _exit(false), _error_msgr(msgr) {
 	_label_text.setFont(font);
 	_label_text.setColor(quasi_black);
@@ -38,11 +56,6 @@ graphic_system::graphic_system(const ruler &ruler_arg, sf::Font &font, error_msg
 void graphic_system::resized() {
 	std::lock_guard<std::mutex> guard(_lock);
 	_line_rect.setSize(_ruler.line_size());
-}
-
-void graphic_system::snapshot() {
-	std::lock_guard<std::mutex> guard(_lock);
-	//TODO
 }
 
 void graphic_system::undo() {
@@ -85,12 +98,12 @@ void graphic_system::rmpoint(std::string label, std::vector<double> points) {
 	}
 }
 
-void graphic_system::dump() {
+void graphic_system::save() {
 	std::lock_guard<std::mutex> guard(_lock);
 
 }
 
-void graphic_system::dump(std::string path) {
+void graphic_system::save(std::string path) {
 	std::lock_guard<std::mutex> guard(_lock);
 	auto it = _system.cbegin(), end = _system.cend();
 	if (it == end) {
@@ -107,7 +120,7 @@ void graphic_system::dump(std::string path) {
 	}
 }
 
-void graphic_system::dump(std::string path, std::vector<std::string> lines) {
+void graphic_system::save(std::string path, std::vector<std::string> lines) {
 	std::lock_guard<std::mutex> guard(_lock);
 }
 
