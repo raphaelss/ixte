@@ -5,7 +5,7 @@ add_definitions(--std=c++14 -Wall -Werror -pedantic -pthread -g)
 
 find_package(Threads)
 
-find_package(Boost 1.55 REQUIRED COMPONENTS filesystem system)
+find_package(Boost 1.5 REQUIRED COMPONENTS filesystem system)
 include_directories(${Boost_INCLUDE_DIRS})
 
 set(XTS_SOURCES main.cpp gui.cpp text_buffer.cpp processor.cpp
