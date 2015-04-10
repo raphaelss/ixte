@@ -1,6 +1,6 @@
 /**
-* Xts - a musical temporal structure editor for musical composition and analysis
-* Copyright (C) 2015  Raphael Santos, http://www.raphaelss.com
+* Ixte - a musical temporal structure editor for musical composition and analysis
+* Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 #include <algorithm>
 #include "config.hpp"
 
-namespace xts {
+namespace ixte {
 
 const char *const font_path = "assets/FreeSans.ttf";
 
 gui::gui()
-    : _window(sf::VideoMode(800, 600), "xts"), _font(), _error_msgr(), _ruler(line_width, _font),
+    : _window(sf::VideoMode(800, 600), "ixte"), _font(), _error_msgr(), _ruler(line_width, _font),
     _system(_ruler, _font, _error_msgr), _proc(_system, _error_msgr),
     _text_buffer(13, _font, _proc), _mouse(_ruler, _font) {
 	_window.setFramerateLimit(60);

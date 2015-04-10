@@ -1,6 +1,6 @@
 /**
-* Xts - a musical temporal structure editor for musical composition and analysis
-* Copyright (C) 2015  Raphael Santos, http://www.raphaelss.com
+* Ixte - a musical temporal structure editor for musical composition and analysis
+* Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include <string>
 #include "line.hpp"
 
-namespace xts {
+namespace ixte {
 
 class system {
 public:

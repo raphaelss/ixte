@@ -1,6 +1,6 @@
 /**
-* Xts - a musical temporal structure editor for musical composition and analysis
-* Copyright (C) 2015  Raphael Santos, http://www.raphaelss.com
+* Ixte - a musical temporal structure editor for musical composition and analysis
+* Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #include "mouse.hpp"
 #include "config.hpp"
 
-namespace xts {
+namespace ixte {
 
 mouse::mouse(const ruler &ruler_arg, sf::Font &font)
     : _ruler(ruler_arg), _x(0), _y(0), _t_pos(0), _on(false), _in_line(false),
