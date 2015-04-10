@@ -25,7 +25,6 @@ namespace xts {
 
 const double label_margin = 50;
 const double inter_line_padding = 60;
-const double label_line_padding = 20;
 const double point_circle_radius = 3;
 
 //helper
