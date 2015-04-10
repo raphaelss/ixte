@@ -218,7 +218,7 @@ bool processor::external_cmd(std::string &cmd, std::string &args) {
 		write(test_pipe[1], "", 1);
 		_exit(1);
 	} else {
-		ext.parent_close_unused();
+		ext.parent_close_unused_pipes();
 		close(test_pipe[1]);
 		char ch;
 		int n = read(test_pipe[0], &ch, 1);

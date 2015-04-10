@@ -29,7 +29,7 @@ public:
 	external(error_msgr &msgr, boost::asio::io_service &io_serv);
 	
 	bool child_redirect_stdstreams() const;
-	void parent_close_unused();
+	void parent_close_unused_pipes();
 	void write(const std::string &str);
 	
 private:

@@ -34,7 +34,7 @@ bool external::child_redirect_stdstreams() const {
 	    _err_pipe.dup_write_end(STDERR_FILENO));
 }
 
-void external::parent_close_unused() {
+void external::parent_close_unused_pipes() {
 	_out_pipe.close_write_end();
 	_in_pipe.close_read_end();
 	_err_pipe.close_write_end();
