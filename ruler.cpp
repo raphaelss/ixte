@@ -27,13 +27,11 @@ const double left_margin = 60;
 const double right_margin = 50;
 const double bot_margin = 50;
 const double mark_pixel_spacing = 100;
-const std::array<double, 21> zoom_values =
-    {40.0, 20.0, 10.0, 7.5, 5.0, 3.0, 2.5, 2, 1.5, 1.25,
-     1.0,
-     0.75, 0.5, 0.4, 0.3, 0.25, 0.15, 0.1, 0.05, 0.025, 0.01};
+const std::array<double, 21> zoom_values {40.0, 20.0, 10.0, 7.5, 5.0, 3.0,
+    2.5, 2, 1.5, 1.25, 1.0, 0.75, 0.5, 0.4, 0.3, 0.25, 0.15, 0.1, 0.05, 0.025,
+    0.01};
 const int zoom_reset_index = 10;
 const int zoom_last_i = 20;
-
 
 /* helper */
 static double map_range(double x, double a1, double a2, double b1, double b2) {
@@ -42,8 +40,8 @@ static double map_range(double x, double a1, double a2, double b1, double b2) {
 
 ruler::ruler(double line_width, sf::Font &font)
     : _ruler_rect(), _ruler_mark_rect(), _number_text(),
-      _grid_line({sf::Vertex(sf::Vector2f(0, 0), light_grey),
-                  sf::Vertex(sf::Vector2f(0, 0), light_grey)}),
+      _grid_line{sf::Vertex(sf::Vector2f(0, 0), light_grey),
+                  sf::Vertex(sf::Vector2f(0, 0), light_grey)},
       _tmp_str(), _y(-1), _mark_offset(line_width / 2), _left_t(0),
       _right_t(-1), _zoom_i(zoom_reset_index) {
   _number_text.setColor(quasi_black);
