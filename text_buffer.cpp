@@ -28,7 +28,7 @@ const double bot_margin = 20;
 
 text_buffer::text_buffer(int size, sf::Font &font, processor &proc)
     : _cursor(0), _buffer(), _single_char('\0'), _text(),
-    _cursor_line({sf::Vertex(sf::Vector2f(0, 0), quasi_black), sf::Vertex(sf::Vector2f(0, 0), quasi_black)}),
+    _cursor_line{sf::Vertex(sf::Vector2f(0, 0), quasi_black), sf::Vertex(sf::Vector2f(0, 0), quasi_black)},
     _processor(proc) {
 	_text.setCharacterSize(size);
 	_text.setColor(quasi_black);
