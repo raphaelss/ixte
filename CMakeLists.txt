@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(ixte)
 
-add_definitions(--std=c++11 -Wall -pedantic -pthread -g)
+add_definitions(--std=c++11 -Wall -Werror -pedantic -pthread -g)
 
 find_package(Threads)
 
