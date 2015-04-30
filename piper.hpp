@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -23,26 +23,26 @@ namespace ixte {
 
 class piper {
 public:
-	piper();
-	piper(const piper &other)  = delete;
-	piper(piper &&p) noexcept;
-	~piper() noexcept;
-	
-	piper &operator=(const piper &p) = delete;
-	piper &operator=(piper &&p) noexcept;
-	
-	bool dup_read_end(int pid) const;
-	bool dup_write_end(int pid) const;
-	
-	int read_end() const;
-	int write_end() const;
-	
-	void close_read_end();
-	void close_write_end();
-	
+  piper();
+  piper(const piper &other)  = delete;
+  piper(piper &&p) noexcept;
+  ~piper() noexcept;
+
+  piper &operator=(const piper &p) = delete;
+  piper &operator=(piper &&p) noexcept;
+
+  bool dup_read_end(int pid) const;
+  bool dup_write_end(int pid) const;
+
+  int read_end() const;
+  int write_end() const;
+
+  void close_read_end();
+  void close_write_end();
+
 private:
-	void closefd(int &x);
-	int pipefd[2];
+  void closefd(int &x);
+  int pipefd[2];
 };
 
 }

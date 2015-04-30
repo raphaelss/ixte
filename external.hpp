@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -26,16 +26,16 @@ namespace ixte {
 
 class external {
 public:
-	external(error_msgr &msgr, boost::asio::io_service &io_serv);
-	
-	bool child_redirect_stdstreams() const;
-	void parent_close_unused_pipes();
-	void write(const std::string &str);
-	
+  external(error_msgr &msgr, boost::asio::io_service &io_serv);
+
+  bool child_redirect_stdstreams() const;
+  void parent_close_unused_pipes();
+  void write(const std::string &str);
+
 private:
-	piper _out_pipe, _in_pipe, _err_pipe;
+  piper _out_pipe, _in_pipe, _err_pipe;
 public:
-	boost::asio::posix::stream_descriptor _out, _in, _err;
+  boost::asio::posix::stream_descriptor _out, _in, _err;
 };
 
 }

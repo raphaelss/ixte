@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -31,25 +31,25 @@ namespace ixte {
 
 class gui {
 public:
-	gui();
+  gui();
 
-	void run();
+  void run();
 
 private:
-	void resized(double x, double y);
-	void key_pressed(sf::Keyboard::Key key);
+  void resized(double x, double y);
+  void key_pressed(sf::Keyboard::Key key);
 
-	void draw_lines();
-	void draw();
+  void draw_lines();
+  void draw();
 
-	sf::RenderWindow _window;
-	sf::Font _font;
-	error_msgr _error_msgr;
-	ruler _ruler;
-	graphic_system _system;
-	processor _proc;
-	text_buffer _text_buffer;
-	mouse _mouse;
+  sf::RenderWindow _window;
+  sf::Font _font;
+  error_msgr _error_msgr;
+  ruler _ruler;
+  graphic_system _system;
+  processor _proc;
+  text_buffer _text_buffer;
+  mouse _mouse;
 };
 
 }

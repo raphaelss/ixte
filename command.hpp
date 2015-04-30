@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -25,16 +25,16 @@ namespace ixte {
 
 class command {
 public:
-	enum type {
-		MKLINE, RMLINE, MKPOINT, RMPOINT, GROUP
-	};
-	virtual ~command() = 0;
-	virtual void execute(graphic_system &sys) const = 0;
-	virtual void execute_reverse(graphic_system &sys) const;
-	virtual type cmd_type() const = 0;
-	
-	static std::unique_ptr<command> combine
-	    (std::unique_ptr<command> &&lhs, std::unique_ptr<command> &&rhs);
+  enum type {
+    MKLINE, RMLINE, MKPOINT, RMPOINT, GROUP
+  };
+  virtual ~command() = 0;
+  virtual void execute(graphic_system &sys) const = 0;
+  virtual void execute_reverse(graphic_system &sys) const;
+  virtual type cmd_type() const = 0;
+
+  static std::unique_ptr<command> combine
+      (std::unique_ptr<command> &&lhs, std::unique_ptr<command> &&rhs);
 };
 
 }
