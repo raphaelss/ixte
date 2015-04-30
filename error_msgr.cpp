@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 namespace ixte {
 
 void error_msgr::operator()(const std::string &str) {
-	std::lock_guard<std::mutex> guard(_lock);
-	std::cerr << str << std::endl;
+  std::lock_guard<std::mutex> guard(_lock);
+  std::cerr << str << std::endl;
 }
 
 }

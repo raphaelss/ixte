@@ -1,5 +1,5 @@
 /**
-* Ixte - a musical temporal structure editor for musical composition and analysis
+* Ixte - a temporal structure editor for musical composition and analysis
 * Copyright (C) 2015  Raphael Sousa Santos, http://www.raphaelss.com
 *
 * This program is free software: you can redistribute it and/or modify
@@ -20,15 +20,14 @@
 #include "gui.hpp"
 
 int main() {
-	std::cout
-	    << "Ixte Copyright (C) 2015  Raphael Sousa Santos, http://raphaelss.com/\n"
-	    << "This program comes with ABSOLUTELY NO WARRANTY.\n"
-	    << "This is free software, and you are welcome to redistribute it\n"
-	    << "under certain conditions.\n"
-            << "You should have received a copy of the GNU General Public License\n"
-            << "along with this program.  If not, see http://www.gnu.org/licenses/.\n";
-	ixte::gui app;
-	app.run();
-	std::cout << "Exiting Ixte.\n";
-	return 0;
+  std::cout
+    << "Ixte Copyright (C) 2015  Raphael Sousa Santos, http://raphaelss.com/\n"
+    << "This program comes with ABSOLUTELY NO WARRANTY.\n"
+    << "This is free software, and you are welcome to redistribute it\n"
+    << "under certain conditions.\n"
+    << "You should have received a copy of the GNU General Public License\n"
+    << "along with this program.  If not, see http://www.gnu.org/licenses/.\n";
+  ixte::gui app;
+  app.run();
+  return 0;
 }
