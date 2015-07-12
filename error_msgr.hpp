@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ERROR_MSGR_HTTP_XTS_INCLUDED
-#define ERROR_MSGR_HTTP_XTS_INCLUDED
+#ifndef ERROR_MSGR_HTTP_IXTE_INCLUDED
+#define ERROR_MSGR_HTTP_IXTE_INCLUDED
 #include <string>
 #include <mutex>
 

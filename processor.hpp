@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef PROCESSOR_HPP_XTS_INCLUDED
-#define PROCESSOR_HPP_XTS_INCLUDED
+#ifndef PROCESSOR_HPP_IXTE_INCLUDED
+#define PROCESSOR_HPP_IXTE_INCLUDED
 #include <string>
 #include <vector>
 #include <thread>

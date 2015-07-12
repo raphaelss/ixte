@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TEXT_BUFFER_HPP_INCLUDED
-#define TEXT_BUFFER_HPP_INCLUDED
+#ifndef TEXT_BUFFER_HPP_IXTE_INCLUDED
+#define TEXT_BUFFER_HPP_IXTE_INCLUDED
 #include <SFML/Graphics.hpp>
 #include "processor.hpp"
 

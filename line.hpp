@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef LINE_HPP_XTS_INCLUDED
-#define LINE_HPP_XTS_INCLUDED
+#ifndef LINE_HPP_IXTE_INCLUDED
+#define LINE_HPP_IXTE_INCLUDED
 #include <set>
 #include <algorithm>
 

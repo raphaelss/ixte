@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef EXTERNAL_HPP_XTS_INCLUDED
-#define EXTERNAL_HPP_XTS_INCLUDED
+#ifndef EXTERNAL_HPP_IXTE_INCLUDED
+#define EXTERNAL_HPP_IXTE_INCLUDED
 #include "error_msgr.hpp"
 #include "piper.hpp"
 #include <boost/asio.hpp>
