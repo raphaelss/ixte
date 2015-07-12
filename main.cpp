@@ -15,18 +15,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
+#include <stdexcept>
 #include "gui.hpp"
 
 int main() {
-  std::cout
-    << "Ixte Copyright (C) 2015  Raphael Sousa Santos, http://raphaelss.com/\n"
-    << "This program comes with ABSOLUTELY NO WARRANTY.\n"
-    << "This is free software, and you are welcome to redistribute it under\n"
-    << "certain conditions.\n"
-    << "You should have received a copy of the GNU Affero General Public "
-       "License\n"
-    << "along with this program.  If not, see http://www.gnu.org/licenses/.\n";
-  ixte::gui app;
-  app.run();
-  return 0;
+  std::cout <<
+    "Ixte Copyright (C) 2015  Raphael Sousa Santos, http://raphaelss.com/\n"
+    "This program comes with ABSOLUTELY NO WARRANTY.\n"
+    "This is free software, and you are welcome to redistribute it under "
+    "certain\nconditions.\n"
+    "You should have received a copy of the GNU Affero General Public "
+    "License\n"
+    "along with this program.  If not, see http://www.gnu.org/licenses/.\n";
+  try {
+    ixte::gui app;
+    app.run();
+    return 0;
+  } catch (std::runtime_error &e) {
+    std::cerr << e.what() << std::endl;
+    return 1;
+  }
 }

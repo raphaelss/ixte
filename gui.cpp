@@ -16,6 +16,7 @@
 
 #include "gui.hpp"
 #include <algorithm>
+#include <stdexcept>
 #include "config.hpp"
 
 namespace ixte {
@@ -23,11 +24,14 @@ namespace ixte {
 const char *const font_path = "assets/FreeSans.ttf";
 
 gui::gui()
-    : _window(sf::VideoMode(800, 600), "ixte"), _font(), _error_msgr(), _ruler(line_width, _font),
-    _system(_ruler, _font, _error_msgr), _proc(_system, _error_msgr),
-    _text_buffer(13, _font, _proc), _mouse(_ruler, _font) {
+    : _window(sf::VideoMode(800, 600), "ixte"), _font(), _error_msgr(),
+      _ruler(line_width, _font), _system(_ruler, _font, _error_msgr),
+      _proc(_system, _error_msgr), _text_buffer(13, _font, _proc),
+      _mouse(_ruler, _font) {
   _window.setFramerateLimit(60);
-  _font.loadFromFile(font_path);
+  if (!_font.loadFromFile(font_path)) {
+      throw std::runtime_error("Error loading font.");
+  }
   auto size = _window.getSize();
   resized(size.x, size.y);
   auto mouse_pos = sf::Mouse::getPosition(_window);

@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GUI_HPP_XTS_INCLUDED
-#define GUI_HPP_XTS_INCLUDED
+#ifndef GUI_HPP_IXTE_INCLUDED
+#define GUI_HPP_IXTE_INCLUDED
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "error_msgr.hpp"
