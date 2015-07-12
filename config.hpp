@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CONFIG_HPP_XTS_INCLUDED
-#define CONFIG_HPP_XTS_INCLUDED
+#ifndef CONFIG_HPP_IXTE_INCLUDED
+#define CONFIG_HPP_IXTE_INCLUDED
 #include <SFML/Graphics.hpp>
 
 namespace ixte {
 
-const double line_width = 2;
+constexpr double line_width = 2;
 
 const sf::Color quasi_black(50, 50, 50);
 const sf::Color light_grey(200, 200, 200);

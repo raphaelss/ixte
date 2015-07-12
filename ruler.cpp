@@ -39,7 +39,7 @@ static double map_range(double x, double a1, double a2, double b1, double b2) {
 ruler::ruler(double line_width, sf::Font &font)
     : _ruler_rect(), _ruler_mark_rect(), _number_text(),
       _grid_line{sf::Vertex(sf::Vector2f(0, 0), light_grey),
-                  sf::Vertex(sf::Vector2f(0, 0), light_grey)},
+                 sf::Vertex(sf::Vector2f(0, 0), light_grey)},
       _tmp_str(), _y(-1), _mark_offset(line_width / 2), _left_t(0),
       _right_t(-1), _zoom_i(zoom_reset_index) {
   _number_text.setColor(quasi_black);

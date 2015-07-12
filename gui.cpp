@@ -21,7 +21,7 @@
 
 namespace ixte {
 
-const char *const font_path = "assets/FreeSans.ttf";
+static const char *const font_path = "assets/FreeSans.ttf";
 
 gui::gui()
     : _window(sf::VideoMode(800, 600), "ixte"), _font(), _error_msgr(),

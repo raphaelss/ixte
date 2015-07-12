@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef RULER_HPP_XTS_INCLUDED
-#define RULER_HPP_XTS_INCLUDED
+#ifndef RULER_HPP_IXTE_INCLUDED
+#define RULER_HPP_IXTE_INCLUDED
 #include <string>
 #include <SFML/Graphics.hpp>
 

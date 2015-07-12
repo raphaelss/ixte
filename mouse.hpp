@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MOUSE_HPP_XTS_INCLUDED
-#define MOUSE_HPP_XTS_INCLUDED
+#ifndef MOUSE_HPP_IXTE_INCLUDED
+#define MOUSE_HPP_IXTE_INCLUDED
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "ruler.hpp"
@@ -32,7 +32,7 @@ public:
   void draw(sf::RenderTarget &target);
 
 private:
-  const ruler &_ruler;
+  const ruler *_ruler;
   double _x, _y, _t_pos;
   bool _on, _in_line;
   std::string _str;
