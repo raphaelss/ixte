@@ -21,8 +21,8 @@ int main() {
   std::cout
     << "Ixte Copyright (C) 2015  Raphael Sousa Santos, http://raphaelss.com/\n"
     << "This program comes with ABSOLUTELY NO WARRANTY.\n"
-    << "This is free software, and you are welcome to redistribute it\n"
-    << "under certain conditions.\n"
+    << "This is free software, and you are welcome to redistribute it under\n"
+    << "certain conditions.\n"
     << "You should have received a copy of the GNU Affero General Public "
        "License\n"
     << "along with this program.  If not, see http://www.gnu.org/licenses/.\n";
