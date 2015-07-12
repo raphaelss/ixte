@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SYSTEM_HPP_XTS_INCLUDED
-#define SYSTEM_HPP_XTS_INCLUDED
+#ifndef SYSTEM_HPP_IXTE_INCLUDED
+#define SYSTEM_HPP_IXTE_INCLUDED
 #include <vector>
 #include <utility>
 #include <string>

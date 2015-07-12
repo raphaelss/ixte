@@ -16,7 +16,6 @@
 
 #ifndef GUI_HPP_IXTE_INCLUDED
 #define GUI_HPP_IXTE_INCLUDED
-#include <string>
 #include <SFML/Graphics.hpp>
 #include "error_msgr.hpp"
 #include "text_buffer.hpp"

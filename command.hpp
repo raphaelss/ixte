@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef COMMAND_HPP_XTS_INCLUDED
-#define COMMAND_HPP_XTS_INCLUDED
+#ifndef COMMAND_HPP_IXTE_INCLUDED
+#define COMMAND_HPP_IXTE_INCLUDED
 #include <memory>
 #include "graphic_system.hpp"
 
